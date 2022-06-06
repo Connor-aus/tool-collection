@@ -14,22 +14,26 @@ namespace ConsoleApp1
         StaffMember staffMember;
         UserMember userMember;
 
+
         public MainMenu()
         {
             Name = "Main Menu";
 
-            DisplayMainMenu();
+            // create generic staff member
+            staffMember = new StaffMember("staff", "today123");
         }
 
-        public void DisplayMainMenu()
+
+        public override void DisplayMainMenu()
         {
             Console.Clear();
             previousMenu = () => { Console.WriteLine("\nExiting program..."); };
 
-            var menuOptions = new string[] { $"{nameof(StaffLogin)}", $"{nameof(MemberLogin)}", "Exit" };
+            var menuOptions = new string[] { "Staff Login", "Member Login", "Exit" };
 
             DisplayMenuOptions(menuOptions);
         }
+
 
         public override void InvokeMethod(int selection)
         {
@@ -41,10 +45,12 @@ namespace ConsoleApp1
 
                 case 1:
                     StaffLogin();
+                    previousMenu();
                     break;
 
                 case 2:
                     MemberLogin();
+                    previousMenu();
                     break;
 
                 default:
@@ -52,45 +58,39 @@ namespace ConsoleApp1
             }
         }
 
+
         public void StaffLogin()
         {
             Console.Clear();
             previousMenu = DisplayMainMenu;
-            string[] staffDetails = new string[] { "staff", "today123" };
-            bool validInput = false;
-            string username;
-            string password = "-1";
+
+            string username = "";
+            string password = "";
 
             Console.WriteLine("==========Staff Login==========");
-            Console.WriteLine("\n**you can enter '0' at any time to return**");
+            Console.WriteLine("     Enter login details (0 to exit)");
 
-            while (!validInput && password != "0")
+            while (password != "0")
             {
-
-                Console.Write("\n   Please enter your first username    : ");
+                Console.Write("\n   Please enter your username  : ");
                 username = Console.ReadLine();
 
-                if (username != "0")
+                if (username == staffMember.Username && username != "0")
                 {
-                    Console.Write("\n   Please enter your password          : ");
+                    Console.Write("\n   Please enter your password  : ");
                     password = Console.ReadLine();
 
-                    if (username == staffDetails[0] && password == staffDetails[1])
+                    if (staffMember.CheckPassword(password))
                     {
-                        staffMember = new StaffMember(username, password);
+                        staffMember.staffMenu.DisplayMainMenu();
                         break;
                     }
                 }
-                else
-                {
-                    break;
-                }
 
-                Console.WriteLine("\n User details not found. Please try again");
+                Console.WriteLine("\n User not found. Please try again");
             }
-
-            previousMenu();
         }
+
 
         public void MemberLogin()
         {
@@ -98,22 +98,76 @@ namespace ConsoleApp1
             previousMenu = DisplayMainMenu;
 
             string[] userDetails;
+            string firstName = "";
+            string lastName = "";
+            string password = "";
 
             Console.WriteLine("==========Member Login==========");
+            Console.WriteLine("     Enter login details (0 to exit)");
 
-            Console.Write("\n   Please enter your first name    : ");
-            string firstName = Console.ReadLine();
+            while (password != "0")
+            {
+                Console.Write("\n   Please enter your first name    : ");
+                firstName = Console.ReadLine();
 
-            Console.Write("\n   Please enter your last name     : ");
-            string lastName = Console.ReadLine();
+                while (firstName == "")
+                    firstName = InvalidInput();
 
-            Console.Write("\n   Please enter your password      : ");
-            string password = Console.ReadLine();
+                if (firstName == "0")
+                    break;
 
-            userDetails = new string[] { firstName, lastName, password };
+                Console.Write("\n   Please enter your last name     : ");
+                lastName = Console.ReadLine();
 
-            // search in membercollection.
+                while (lastName == "")
+                    lastName = InvalidInput();
 
+                if (lastName == "0")
+                    break;
+
+                Console.Write("\n   Please enter your password      : ");
+                password = Console.ReadLine();
+
+                if (password == "0")
+                    break;
+
+                userDetails = new string[] { firstName, lastName };
+
+                var memberIndex = MemberCollection.Members.Search(userDetails);
+
+                if (memberIndex == -1)
+                {
+                    Console.Write("\nUser not found, please try again ");
+                    Console.ReadLine();
+                    MemberLogin();
+                }
+                else
+                {
+                    UserMember member = (UserMember)MemberCollection.Members.MemberArray[memberIndex].Value;
+                    if (member.CheckPassword(password))
+                    {
+                        Console.Write($"\n\tWelcome {firstName}\n ");
+                        Console.ReadLine();
+
+                        member.userMenu.DisplayMainMenu();
+                    }
+                    else
+                    {
+                        Console.Write("Incorrect password, please try again ");
+                        Console.ReadLine();
+                        MemberLogin();
+                    }
+                }
+
+                Console.WriteLine("\n\tUser not found. Please try again");
+            }
+        }
+
+
+        public string InvalidInput()
+        {
+            Console.Write("\n\t Invalid input. Try again: ");
+            return Console.ReadLine();
         }
     }
 }

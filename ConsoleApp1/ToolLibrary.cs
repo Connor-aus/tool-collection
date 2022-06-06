@@ -6,31 +6,54 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            MemberCollection memberCollection = new MemberCollection();
-            ToolCollection toolCollection = new ToolCollection();
-
-            // populate dummy user members and a staff member data
-            PopulateUsers();
+            MemberCollection memberCollection = MemberCollection.InitializeMemberCollection();
+            ToolCollection toolCollection = ToolCollection.InitializeToolCollection();
 
             // populate tool data
-            PopulateTools();
-            
+            toolCollection.PopulateToolData();
+
+            // populate dummy user members and a staff member data
+            PopulateTestUserData();
 
             Console.WriteLine("Welcome to the Tool Library System\n");
 
             Menu mainMenu = new MainMenu();
+            mainMenu.DisplayMainMenu();
 
-                Console.ReadKey();
+            Console.ReadKey();
         }
 
-        private static void PopulateTools()
+        public static void PopulateTestUserData()
         {
-            // tools
+            // TOFO: user members and a staff member
         }
 
-        public static void PopulateUsers()
+        public static void TestHashTable()
         {
-            // user members and a staff member
+            // TODO: 
+            Hashtable h = new Hashtable(17);
+            h.Insert(59);
+            h.Print();
+            h.Insert(39);
+            h.Print();
+            h.Insert(20);
+            h.Print();
+            h.Insert(33);
+            h.Print();
+            h.Insert(58);
+            h.Print();
+            h.Insert(23);
+            h.Print();
+            h.Insert(12);
+            h.Print();
+            h.Insert(29);
+            h.Print();
+            h.Insert(57);
+            h.Print();
+            h.Delete(29);
+            h.Print();
+            h.Delete(39);
+            h.Print();
         }
     }
 }

@@ -8,6 +8,8 @@ namespace ConsoleApp1
     {
         public abstract string Name { get; }
 
+        public abstract void DisplayMainMenu();
+
         public void DisplayMenuOptions(string[] menuOptions)
         {
             bool validSelection = false;
@@ -21,12 +23,12 @@ namespace ConsoleApp1
             }
             Console.WriteLine($"0. {menuOptions[menuOptionsLength - 1]}");
 
-            Console.WriteLine("==========================");
+            Console.WriteLine("===========================");
 
 
             while (!validSelection)
             {
-                Console.Write("     Select option from menu (0 to exit) - ");
+                Console.Write("     Select option from menu (0 to exit) : ");
                 validSelection = Int32.TryParse(Console.ReadLine(), out int selection);
 
                 if (validSelection && 0 <= selection && selection < menuOptions.Length)
