@@ -58,6 +58,12 @@ namespace ConsoleApp1
 
         public void StaffLogin()
         {
+            //TODO remove auto login
+            previousMenu = DisplayMainMenu;
+            staffMember.staffMenu.DisplayMainMenu();
+            return;
+
+
             Console.Clear();
             previousMenu = DisplayMainMenu;
 

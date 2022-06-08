@@ -156,8 +156,14 @@ namespace ConsoleApp1
                 }
             }
 
+            //TODO remove dummy data here
+            ToolLibrary[0][0][6] = new Tool(toolCategories[0], toolTypes[0][0], "test1", 5);
+            ToolLibrary[0][0][7] = new Tool(toolCategories[0], toolTypes[0][0], "test2", 5);
+            ToolLibrary[0][0][8] = new Tool(toolCategories[0], toolTypes[0][0], "test3", 5);
+            ToolLibrary[0][0][9] = new Tool(toolCategories[0], toolTypes[0][0], "test4", 5);
+
             Console.Write("\n\t Above are some dummy tools. The names can be used as reference. \n");
-            Console.ReadLine();
+            Console.ReadKey();
         }
     }
 }

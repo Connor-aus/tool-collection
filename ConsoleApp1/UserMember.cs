@@ -183,7 +183,7 @@ namespace ConsoleApp1
             for (int i = 0; i < CurrentBorrowedTools.Length; i++)
             {
                 if (CurrentBorrowedTools[i] != null)
-                    Console.WriteLine($"Name: {CurrentBorrowedTools[i].Name}    Count: x{CurrentBorrowedTools[i].Count}");
+                    Console.WriteLine($"Tool: {CurrentBorrowedTools[i].Name}    Count: x{CurrentBorrowedTools[i].Count}");
             }
 
             Console.ReadKey();

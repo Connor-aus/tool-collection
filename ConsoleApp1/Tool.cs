@@ -66,7 +66,7 @@ namespace ConsoleApp1
             int loansFound = 0;
             int numberLoaned = 0;
 
-            if (NumberOnLoan <=0)
+            if (NumberOnLoan <= 0)
             {
                 Console.WriteLine("None of these tools are on loan");
                 return;
@@ -81,15 +81,15 @@ namespace ConsoleApp1
 
                     for (int j = 0; j < member.CurrentBorrowedTools.Length; j++)
                     {
-                        if (member.CurrentBorrowedTools[i]?.Name == this.Name)
+                        if (member.CurrentBorrowedTools[j]?.Name == this.Name)
                         {
-                            numberLoaned = member.CurrentBorrowedTools[i].Count;
+                            numberLoaned = member.CurrentBorrowedTools[j].Count;
                             loansFound += numberLoaned;
                             break;
                         }
                     }
 
-                    Console.WriteLine($"{member.Name[0]} {member.Name[1]} is borrowing {numberLoaned} {this.Name}");
+                    Console.WriteLine($"Member: {member.Name[0]} {member.Name[1]}  Count: x{numberLoaned}");
                 }
             }
         }
