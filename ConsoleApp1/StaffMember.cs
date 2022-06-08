@@ -50,7 +50,7 @@ namespace ConsoleApp1
 
                 Console.WriteLine("\n\tThis tool already exist in the Library.");
                 Console.WriteLine($"\tAdding another {toolName} to the library. ");
-                Console.Write($"\tThere is now {tool.Total} copie(s) of {toolName} in the library. ");
+                Console.Write($"\tThere is now a total of {tool.Total} {toolName} in the library. ");
                 Console.ReadKey();
 
                 return;
@@ -123,14 +123,14 @@ namespace ConsoleApp1
                     while (toolType == "" || toolType == "0")
                         toolType = InvalidInput();
 
-                    if(toolType == "0")
-                    return;
+                    if (toolType == "0")
+                        return;
 
                     // increase length of type array in chosen category to allow for new tool type
                     var types = new Tool[ToolCollection.Tools.ToolLibrary[category - 1].Length + 1][];
 
                     for (int i = 0; i < ToolCollection.Tools.ToolLibrary[category - 1].Length; i++)
-                       types[i] = ToolCollection.Tools.ToolLibrary[category - 1][i] ?? null;
+                        types[i] = ToolCollection.Tools.ToolLibrary[category - 1][i] ?? null;
 
                     types[types.Length - 1] = new Tool[10];
 
@@ -168,8 +168,6 @@ namespace ConsoleApp1
                     Console.WriteLine($"\t\tCetegory  : {toolCategory}");
                     Console.Write($"\t\tType      : {toolType} ");
                     Console.ReadKey();
-
-                    return;
                 }
             }
         }
@@ -177,9 +175,54 @@ namespace ConsoleApp1
 
         public void RemoveTool()
         {
-            // TODO: make sure to remove from all tool arrays in Member (should be automatic)
-            // make sure that there are available tools left then decrement totol
-            // if total become 0 is the tool deleted
+            Console.Clear();
+
+            string toolName;
+
+            Console.WriteLine("==========Remove Tool==========");
+            Console.WriteLine("     Enter tool details (0 to exit)");
+
+            Console.Write("\n   Please enter a tool name  : ");
+            toolName = Console.ReadLine();
+
+            while (toolName == "")
+                toolName = InvalidInput();
+
+            while (toolName != "0")
+            {
+                var tool = ToolCollection.Tools.SearchTool(toolName);
+
+                if (tool != null)
+                {
+                    if (tool.Total <= 0)
+                        Console.Write($"\tCannot remove {toolName} as there none in the library. ");
+                    else if (tool.Available <= 0)
+                        Console.Write($"\tCannot remove {toolName} as they are all on loan. ");
+                    else if (tool.Total == 1)
+                    {
+                        // remove tool from tool library
+                        ToolCollection.Tools.RemoveTool(tool);
+                        Console.WriteLine($"\tThe final copy of {toolName} has been removed.");
+                        Console.Write($"\t{toolName} has been removed from the library. ");
+                    }
+                    else
+                    {
+                        tool.Total--;
+                        Console.Write($"\tThere is now a total of {tool.Total} {toolName} in the library. ");
+                    }
+
+                    Console.ReadKey();
+                    return;
+                }
+                else
+                {
+                    Console.Write("\nTool not found. Please try again : ");
+                    toolName = Console.ReadLine();
+
+                    while (toolName == "")
+                        toolName = InvalidInput();
+                }
+            }
         }
 
 
@@ -262,8 +305,6 @@ namespace ConsoleApp1
 
         public void RemoveMember()
         {
-            // TODO: make sure member is removed from all tool collections also
-
             Console.Clear();
 
             string[] userDetails;
@@ -317,6 +358,15 @@ namespace ConsoleApp1
             }
             else
             {
+                var member = (UserMember)MemberCollection.Members.MemberArray[found].Value;
+
+                if (member.TotalToolsBorrowed > 0)
+                {
+                    Console.Write($"\n{firstName} currently has tools on loan and cannot be removed. ");
+                    Console.ReadKey();
+                    return;
+                }
+
                 MemberCollection.Members.Delete(userDetails);
 
                 Console.Write("\n\tSuccess ");
@@ -327,6 +377,8 @@ namespace ConsoleApp1
 
         public void DisplayMembersBorrowingTool()
         {
+            // TODO check is displays multiple users
+
             Console.Clear();
 
             Console.WriteLine("==========Display Member Currently Borrowing a Tool==========");
@@ -360,11 +412,11 @@ namespace ConsoleApp1
                     if (response == "1")
                     {
                         DisplayMembersBorrowingTool();
-                        break;
+                        return;
                     }
                     else if (response == "0")
                     {
-                        break;
+                        return;
                     }
 
                     Console.Write("\n\t\tInvalid respones, try again: ");
@@ -415,11 +467,11 @@ namespace ConsoleApp1
                     if (response == "1")
                     {
                         FindMemberPhoneNumber();
-                        continue;
+                        return;
                     }
                     else if (response == "0")
                     {
-                        continue;
+                        return;
                     }
 
                     Console.Write("\n\t\tInvalid respones, try again: ");

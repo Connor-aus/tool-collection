@@ -24,7 +24,7 @@ namespace ConsoleApp1
         public override void DisplayMainMenu()
         {
             Console.Clear();
-            previousMenu = () => { Console.WriteLine("\nExiting program..."); };
+            previousMenu = () => { Console.WriteLine("\nExiting program . . ."); };
 
             var menuOptions = new string[] { "Staff Login", "Member Login", "Exit" };
 
@@ -114,7 +114,7 @@ namespace ConsoleApp1
             Console.WriteLine("==========Member Login==========");
             Console.WriteLine("     Enter login details (0 to exit)");
 
-            while (password != "0")
+            if (password != "0")
             {
                 Console.Write("\n   Please enter your first name    : ");
                 firstName = Console.ReadLine();
@@ -140,7 +140,7 @@ namespace ConsoleApp1
 
                 if (memberIndex == -1)
                 {
-                    Console.Write("\nUser not found, please try again ");
+                    Console.WriteLine("\nUser not found, please try again . . .");
                     Console.ReadLine();
                     MemberLogin();
                 }

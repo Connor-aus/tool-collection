@@ -11,17 +11,22 @@ namespace ConsoleApp1
         public string Name { get; set; }
         public int Total { get; set; }
         public int NumberOnLoan { get; set; }
-        public int Avalable { get; set; }
+        private int available;
         public int[] MembersCurrentlyBorrowingIndex { get; set; }
+
+        public int Available
+        {
+            get { return (Total - NumberOnLoan); }
+        }
 
         public Tool(string category, string type, string name, int quantity)
         {
             Category = category;
             Type = type;
             Name = name;
-            Total = quantity;
+            Total = 3; // TODO set this to quantity
             NumberOnLoan = 0;
-            Avalable = Total - NumberOnLoan;
+            available = Total - NumberOnLoan;
             MembersCurrentlyBorrowingIndex = new int[MemberCollection.Members.Capacity];
         }
 
@@ -32,32 +37,15 @@ namespace ConsoleApp1
 
             MembersCurrentlyBorrowingIndex[index] = 1;
             NumberOnLoan++;
-            Avalable = Total - NumberOnLoan;
-
-            //MembersCurrentlyBorrowingIndex[index] = userBorrowing;
-            //NumberOnLoanByMember[index] = 1;
+        }
 
 
-            //var userBorrowedTools = userBorrowing.CurrentBorrowedTools;
+        public void RemoveBorrower(UserMember user)
+        {
+            int index = MemberCollection.Members.Search(user.Name);
 
-            //NumberOnLoan++;
-
-            //for (int i = 0; i < userBorrowedTools.Length && userBorrowedTools[i] != null; i++)
-            //{
-            //    if (userBorrowedTools[i].Name == this.Name)
-            //    {
-            //        NumberOnLoanByMember[i]++;
-            //        return;
-            //    }
-            //}
-
-            //int index = MemberCollection.Members.Search(userBorrowing.Name);
-
-            //while (MembersCurrentlyBorrowingIndex[index] != null)
-            //    index++;
-
-            //MembersCurrentlyBorrowingIndex[index] = userBorrowing;
-            //NumberOnLoanByMember[index] = 1;
+            MembersCurrentlyBorrowingIndex[index] = 0;
+            NumberOnLoan--;
         }
 
 

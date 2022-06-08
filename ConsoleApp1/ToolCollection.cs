@@ -51,9 +51,7 @@ namespace ConsoleApp1
                     for (int k = 0; k < ToolLibrary[i][j].Length; k++)
                     {
                         if (ToolLibrary[i][j][k]?.Name == toolName)
-                        {
                             return ToolLibrary[i][j][k];
-                        }
                     }
                 }
             }
@@ -67,6 +65,34 @@ namespace ConsoleApp1
         {
             return new Tool(null, null, null, 0);
             return null;
+        }
+
+        // completely remove tool from library
+        public void RemoveTool(Tool tool)
+        {
+            int categoryIndex;
+            int typeIndex;
+
+            for (categoryIndex = 0; categoryIndex < ToolLibrary.Length; categoryIndex++)
+            {
+                if (ToolLibrary[categoryIndex][0][0]?.Category == tool.Category)
+                    break;
+            }
+
+            for (typeIndex = 0; typeIndex < ToolLibrary[categoryIndex].Length; typeIndex++)
+            {
+                if (ToolLibrary[categoryIndex][typeIndex][0]?.Type == tool.Type)
+                    break;
+            }
+
+            for (int i = 0; i < ToolLibrary[categoryIndex][typeIndex].Length; i++)
+            {
+                if (ToolLibrary[categoryIndex][typeIndex][i]?.Name == tool.Name)
+                {
+                    ToolLibrary[categoryIndex][typeIndex][i] = null;
+                    break;
+                }
+            }
         }
 
 

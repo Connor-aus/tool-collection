@@ -89,8 +89,16 @@ namespace ConsoleApp1
 
 
             Console.WriteLine($"\nList of tools within: {toolCategory} - {toolType}:\n");
-            for (int i = 0; i < ToolCollection.Tools.ToolLibrary[category - 1][type - 1].Length && ToolCollection.Tools.ToolLibrary[category - 1][type - 1][i] != null; i++)
-                Console.WriteLine($"\t{i + 1}. {ToolCollection.Tools.ToolLibrary[category - 1][type - 1][i].Name ?? "empty"}");
+
+            int count = 1;
+            for (int i = 0; i < ToolCollection.Tools.ToolLibrary[category - 1][type - 1].Length; i++)
+            {
+                if (ToolCollection.Tools.ToolLibrary[category - 1][type - 1][i] != null)
+                {
+                    Console.WriteLine($"\t{count}. {ToolCollection.Tools.ToolLibrary[category - 1][type - 1][i]?.Name ?? "removed"}");
+                    count++;
+                }
+            }
 
             Console.ReadKey();
         }
@@ -100,12 +108,13 @@ namespace ConsoleApp1
         {
             Console.Clear();
 
-            Console.WriteLine("==========Display Tools==========");
+            Console.WriteLine("==========Borrow Tool==========");
             Console.WriteLine("     Enter tool details (0 to exit)");
 
             if (TotalToolsBorrowed >= MaxBorrowedCapacity)
             {
-                Console.WriteLine("\nYou have reached your maximum borrowing capacity. \nReturn a tool to borrow more.");
+                Console.WriteLine("\nYou have reached your maximum borrowing capacity.");
+                Console.Write("Return a tool to borrow more. ");
                 Console.ReadKey();
                 return;
             }
@@ -121,7 +130,7 @@ namespace ConsoleApp1
 
                 if (tool != null)
                 {
-                    if (tool != null && tool.Avalable <= 0)
+                    if (tool.Available <= 0)
                     {
                         Console.Write("\n\tAll of these tools are currently on loan.");
                         Console.ReadKey();
@@ -135,6 +144,7 @@ namespace ConsoleApp1
                         if (CurrentBorrowedTools[i]?.Name == tool.Name)
                         {
                             CurrentBorrowedTools[i].Count++;
+                            tool.NumberOnLoan++;
                             break;
                         }
 
@@ -157,6 +167,9 @@ namespace ConsoleApp1
                 {
                     Console.Write("\nTool not found. Please try again : ");
                     toolName = Console.ReadLine();
+
+                    while (toolName == "")
+                        toolName = InvalidInput();
                 }
             }
         }
@@ -164,7 +177,61 @@ namespace ConsoleApp1
 
         public void ReturnTool()
         {
-            // TODO: 
+            Console.Clear();
+
+            Console.WriteLine("==========Return Tool==========");
+            Console.WriteLine("     Enter tool details (0 to exit)\n");
+
+            if (TotalToolsBorrowed <= 0)
+            {
+                Console.Write("You are not currently borrowing any tools. ");
+                Console.ReadKey();
+                return;
+            }
+
+            for (int i = 0; i < CurrentBorrowedTools.Length; i++)
+            {
+                if (CurrentBorrowedTools[i] != null)
+                    Console.WriteLine($"Tool: {CurrentBorrowedTools[i].Name}    Count: x{CurrentBorrowedTools[i].Count}");
+            }
+
+            Console.WriteLine("\nEnter the name of the Tool you would like to return");
+            Console.Write("\t: ");
+
+            string toolName = Console.ReadLine();
+
+            while (toolName != "0")
+            {
+                for (int i = 0; i < CurrentBorrowedTools.Length; i++)
+                {
+                    if (CurrentBorrowedTools[i]?.Name == toolName)
+                    {
+                        var tool = ToolCollection.Tools.SearchTool(toolName);
+
+                        if (CurrentBorrowedTools[i].Count > 1)
+                        {
+                            CurrentBorrowedTools[i].Count--;
+                            tool.NumberOnLoan--;
+                        }
+                        else
+                        {
+                            CurrentBorrowedTools[i] = null;
+                            tool.RemoveBorrower(this);
+                        }
+
+                        TotalToolsBorrowed--;
+                        Console.Write("\n\tSuccess ");
+                        Console.ReadKey();
+                        return;
+                    }
+                }
+
+                Console.Write("\nTool not found. Please try again : ");
+                toolName = Console.ReadLine();
+
+                while (toolName == "")
+                    toolName = InvalidInput();
+            }
         }
 
 

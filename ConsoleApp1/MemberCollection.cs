@@ -142,13 +142,14 @@ namespace ConsoleApp1
          */
         private int Hashing(string key)
         {
+            // TODO: implement hashing
             // dictiornary for letters?
             return (1 % buckets);
         }
 
         private int ProbingMethod(int offset)
         {
-            // implement probing method
+            // TODO: implement probing method
             return 0;
         }
     }
