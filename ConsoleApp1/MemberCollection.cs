@@ -151,22 +151,5 @@ namespace ConsoleApp1
             // implement probing method
             return 0;
         }
-
-        /* pre:  nil
-         * post: print all the elements in the hashtable
-        */
-        //public void Print()
-        //{
-        //    for (int i = 0; i < buckets; i++)
-        //    {
-        //        if ((MemberArray[i].ContactNumber == empty) || (MemberArray[i].ContactNumber == deleted))
-        //            Console.Write(" __ ");
-        //        else
-        //            Console.Write(" " + MemberArray[i].ToString() + " ");
-        //    }
-        //    Console.WriteLine();
-        //    Console.WriteLine();
-
-        //}
     }
 }

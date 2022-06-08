@@ -10,10 +10,7 @@ namespace ConsoleApp1
         public override string Name { get; }
         public delegate void PreviousMenu();
         private PreviousMenu previousMenu;
-
-        StaffMember staffMember;
-        UserMember userMember;
-
+        private StaffMember staffMember;
 
         public MainMenu()
         {
@@ -83,7 +80,7 @@ namespace ConsoleApp1
                     if (staffMember.CheckPassword(password))
                     {
                         staffMember.staffMenu.DisplayMainMenu();
-                        break;
+                        return;
                     }
                 }
 
@@ -110,26 +107,26 @@ namespace ConsoleApp1
                 Console.Write("\n   Please enter your first name    : ");
                 firstName = Console.ReadLine();
 
+                if (firstName == "0")
+                    return;
+
                 while (firstName == "")
                     firstName = InvalidInput();
-
-                if (firstName == "0")
-                    break;
 
                 Console.Write("\n   Please enter your last name     : ");
                 lastName = Console.ReadLine();
 
+                if (lastName == "0")
+                    return;
+
                 while (lastName == "")
                     lastName = InvalidInput();
-
-                if (lastName == "0")
-                    break;
 
                 Console.Write("\n   Please enter your password      : ");
                 password = Console.ReadLine();
 
                 if (password == "0")
-                    break;
+                    return;
 
                 userDetails = new string[] { firstName, lastName };
 

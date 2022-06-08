@@ -23,37 +23,26 @@ namespace ConsoleApp1
             Console.ReadKey();
         }
 
+
+        // creates 9 dummy members and adds them to the member collection
         public static void PopulateTestUserData()
         {
-            // TOFO: user members and a staff member
-        }
+            string[] name = new string[2];
+            string number;
 
-        public static void TestHashTable()
-        {
-            // TODO: 
-            Hashtable h = new Hashtable(17);
-            h.Insert(59);
-            h.Print();
-            h.Insert(39);
-            h.Print();
-            h.Insert(20);
-            h.Print();
-            h.Insert(33);
-            h.Print();
-            h.Insert(58);
-            h.Print();
-            h.Insert(23);
-            h.Print();
-            h.Insert(12);
-            h.Print();
-            h.Insert(29);
-            h.Print();
-            h.Insert(57);
-            h.Print();
-            h.Delete(29);
-            h.Print();
-            h.Delete(39);
-            h.Print();
+            for (int i = 0; i < 9; i++)
+            {
+                number = (i + 1).ToString();
+                name[0] = "member" + number;
+                name[1] = "member";
+
+                MemberCollection.Members.Insert(new UserMember(name, number, (i + 1) * 111));
+
+                Console.WriteLine($"new Member : fname: {name[0]}  lname: {name[1]}  pswd: {number}  contact:  {(i + 1) * 111}");
+            }
+
+            Console.Write("\n\t Above are some dummy members. They can be used for the pupose of testing testing member methods. \n");
+            Console.ReadLine();
         }
     }
 }

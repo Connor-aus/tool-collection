@@ -14,7 +14,7 @@ namespace ConsoleApp1
 
         public UserMenu(UserMember user)
         {
-            Name = "Staff Menu";
+            Name = "User Menu";
             userMember = user;
         }
 

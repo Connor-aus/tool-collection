@@ -9,14 +9,15 @@ namespace ConsoleApp1
         // lists history of all borrowed tools
         // uses single array as it is very simple to sort rearranging 1 tool by addition)
         // using a simple sort every entry is expected to be more efficient than using a
-        //  more complex sort each time the DisplayTop3 method is called
-        public Tool[] ToolBorrowHistory { get; set; }
-        
+        //      more complex sort each time the DisplayTop3 method is called
+        public BorrowToken[] ToolBorrowHistory { get; set; }
+
         // list of all tools in library
         public Tool[][][] ToolLibrary { get; set; }
 
         // initiate singleton
         private static ToolCollection tools;
+
 
         // return singleton
         public static ToolCollection Tools
@@ -35,10 +36,77 @@ namespace ConsoleApp1
 
         private ToolCollection(int size)
         {
-            ToolBorrowHistory = new Tool[size];
+            ToolBorrowHistory = new BorrowToken[size];
             ToolLibrary = new Tool[9][][];
         }
 
+
+        // search tool by tool name
+        public Tool SearchTool(string toolName)
+        {
+            for (int i = 0; i < ToolLibrary.Length; i++)
+            {
+                for (int j = 0; j < ToolLibrary[i].Length; j++)
+                {
+                    for (int k = 0; k < ToolLibrary[i][j].Length; k++)
+                    {
+                        if (ToolLibrary[i][j][k]?.Name == toolName)
+                        {
+                            return ToolLibrary[i][j][k];
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+
+        // TODO: search tool by tool category, type and name
+        public static Tool SearchTool(string toolCat, string toolType, string toolName)
+        {
+            return new Tool(null, null, null, 0);
+            return null;
+        }
+
+
+        public void AddToHistory(string toolName)
+        {
+            int index;
+
+            for (index = 0; index < ToolBorrowHistory.Length && ToolBorrowHistory[index] != null; index++)
+            {
+                if (ToolBorrowHistory[index].Name == toolName)
+                {
+                    ToolBorrowHistory[index].Count++;
+                    SortHistory(index);
+                    return;
+                }
+            }
+
+            // add tool to history
+            ToolBorrowHistory[index] = new BorrowToken(toolName);
+        }
+
+
+        private void SortHistory(int index)
+        {
+            // selection sort is used as only one object is being ordered
+
+            for (int i = index; i > 0; i--)
+            {
+                if (ToolBorrowHistory[i].Count > ToolBorrowHistory[i - 1].Count)
+                {
+                    var temp = ToolBorrowHistory[i];
+                    ToolBorrowHistory[i] = ToolBorrowHistory[i - 1];
+                    ToolBorrowHistory[i - 1] = temp;
+                }
+                else
+                    return;
+            }
+        }
+
+        // populate existing tool data
         public void PopulateToolData()
         {
             string[] toolCategories = new string[] {"Gardening tools", "Flooring tools", "Fencing tools", "Measuring tools",
@@ -76,45 +144,16 @@ namespace ConsoleApp1
 
                     for (int k = 0; k < 3; k++)
                     {
-                        // don't need to create any tools yet
-
                         //create 3 example tools for each tool type
                         ToolLibrary[i][j][k] = new Tool(toolCategories[i], toolTypes[i][j], $"{toolTypes[i][j]} example {k + 1}", 5);
 
-                        //Console.Write("Tool category    : " + ToolLibrary[i][j][k].Category);
-                        //Console.WriteLine("Tool type    : " + ToolLibrary[i][j][k].Type);
                         Console.WriteLine("new Tool : " + ToolLibrary[i][j][k].Name);
                     }
                 }
             }
-        }
 
-        // search tool by tool name
-        public Tool SearchTool(string toolName)
-        {
-            for (int i = 0; i < ToolLibrary.Length && ToolLibrary[i][0][0] != null; i++)
-            {
-                for (int j = 0; j < ToolLibrary[i].Length && ToolLibrary[i][j][0] != null; j++)
-                {
-                    for (int k = 0; k < ToolLibrary[i][j].Length && ToolLibrary[i][j][k] != null; k++)
-                    {
-                        if(ToolLibrary[i][j][k].Name == toolName)
-                        {
-                            Console.WriteLine("returning : " + ToolLibrary[i][j][k].Name);
-                            return ToolLibrary[i][j][k];
-                        }
-                    }
-                }
-            }
-
-            Console.WriteLine("Tool not found in library.");
-            return null;
-        }
-
-        // TODO: search tool by tool category, type and name
-        public static Tool SearchTool(string toolCat, string toolType, string toolName)
-        {
-            return null;
+            Console.Write("\n\t Above are some dummy tools. The names can be used as reference. \n");
+            Console.ReadLine();
         }
     }
 }

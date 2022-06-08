@@ -21,13 +21,167 @@ namespace ConsoleApp1
 
         public void AddTool()
         {
-            // TODO: 
+            Console.Clear();
+
+            string toolName;
+            string toolCategory;
+            string toolType;
+            string input;
+
+            Console.WriteLine("==========Add Tool==========");
+            Console.WriteLine("     Enter tool details (0 to exit)");
+
+            Console.Write("\n   Please enter a tool name  : ");
+            toolName = Console.ReadLine();
+
+            while (toolName == "")
+                toolName = InvalidInput();
+
+            if (toolName == "0")
+                return;
+
+            var tool = ToolCollection.Tools.SearchTool(toolName);
+
+            if (tool != null)
+            {
+                // tool already exists
+                // increases total
+
+                tool.Total++;
+
+                Console.WriteLine("\n\tThis tool already exist in the Library.");
+                Console.WriteLine($"\tAdding another {toolName} to the library. ");
+                Console.Write($"\tThere is now {tool.Total} copie(s) of {toolName} in the library. ");
+                Console.ReadKey();
+
+                return;
+            }
+            else
+            {
+                // tool is new
+                // enter tool category
+
+                Console.WriteLine($"\n\t{toolName} does not currently exist in the library.");
+                Console.WriteLine("\tPlease answer the following questions so it can be added.");
+                Console.WriteLine("\nPlease select a category for this tool:\n");
+
+                for (int i = 0; i < ToolCollection.Tools.ToolLibrary.Length; i++)
+                    Console.WriteLine($"\t{i + 1}. {ToolCollection.Tools.ToolLibrary[i][0][0].Category ?? "empty"}");
+
+                Console.WriteLine($"\t0. Exit");
+
+                input = Console.ReadLine();
+
+                if (input == "0")
+                    return;
+
+                int.TryParse(input, out int category);
+
+                while (category < 1 || category > ToolCollection.Tools.ToolLibrary.Length)
+                {
+                    input = InvalidInput();
+
+                    if (input == "0")
+                        return;
+
+                    int.TryParse(input, out category);
+                }
+
+                toolCategory = ToolCollection.Tools.ToolLibrary[category - 1][0][0].Category;
+
+
+                // enter tool type
+                Console.WriteLine("\nPlease select a type for this tool:\n");
+                for (int i = 0; i < ToolCollection.Tools.ToolLibrary[category - 1].Length; i++)
+                    Console.WriteLine($"\t{i + 1}. {ToolCollection.Tools.ToolLibrary[category - 1][i][0].Type ?? "empty"}");
+
+                Console.WriteLine($"\t99. Create a new tool type.");
+                Console.WriteLine($"\t0. Exit");
+
+                input = Console.ReadLine();
+
+                if (input == "0")
+                    return;
+
+                int.TryParse(input, out int type);
+
+                while (type < 1 || (type > ToolCollection.Tools.ToolLibrary[category - 1].Length && type != 99))
+                {
+                    input = InvalidInput();
+
+                    if (input == "0")
+                        return;
+
+                    int.TryParse(input, out type);
+                }
+
+                if (type == 99)
+                {
+                    // create new tool type, add to array and add new tool
+
+                    Console.Write("\n   Please enter name of new tool type  : ");
+                    toolType = Console.ReadLine();
+
+                    while (toolType == "" || toolType == "0")
+                        toolType = InvalidInput();
+
+                    if(toolType == "0")
+                    return;
+
+                    // increase length of type array in chosen category to allow for new tool type
+                    var types = new Tool[ToolCollection.Tools.ToolLibrary[category - 1].Length + 1][];
+
+                    for (int i = 0; i < ToolCollection.Tools.ToolLibrary[category - 1].Length; i++)
+                       types[i] = ToolCollection.Tools.ToolLibrary[category - 1][i] ?? null;
+
+                    types[types.Length - 1] = new Tool[10];
+
+                    //assumed 5 tools are added at the beginning
+                    types[types.Length - 1][0] = new Tool(toolCategory, toolType, toolName, 5);
+
+                    ToolCollection.Tools.ToolLibrary[category - 1] = types;
+
+                    Console.WriteLine("\n\tSuccess. The following tool has been added:");
+                    Console.WriteLine($"\t\tName      : {toolName}");
+                    Console.WriteLine($"\t\tCetegory  : {toolCategory}");
+                    Console.WriteLine($"\t\tType      : {toolType} ");
+                    Console.Write($"\t\tQuantity  : {ToolCollection.Tools.ToolLibrary[category - 1][0][0].Total} ");
+                    Console.ReadKey();
+
+                    return;
+                }
+                else
+                {
+                    //add tool to exisitng tool category
+
+                    toolType = ToolCollection.Tools.ToolLibrary[category - 1][type - 1][0].Type;
+
+                    // assumed the array is not full
+                    int index = 0;
+
+                    while (ToolCollection.Tools.ToolLibrary[category - 1][type - 1][index] != null)
+                        index++;
+
+                    //assumed 5 tools are added at the beginning
+                    ToolCollection.Tools.ToolLibrary[category - 1][type - 1][index] = new Tool(toolCategory, toolType, toolName, 5);
+
+                    Console.WriteLine("\n\tSuccess. The following tool has been added:");
+                    Console.WriteLine($"\t\tName      : {toolName}");
+                    Console.WriteLine($"\t\tCetegory  : {toolCategory}");
+                    Console.Write($"\t\tType      : {toolType} ");
+                    Console.ReadKey();
+
+                    return;
+                }
+            }
         }
 
 
         public void RemoveTool()
         {
             // TODO: make sure to remove from all tool arrays in Member (should be automatic)
+            // make sure that there are available tools left then decrement totol
+            // if total become 0 is the tool deleted
         }
 
 
@@ -38,7 +192,7 @@ namespace ConsoleApp1
             string[] userDetails;
             string firstName = "";
             string lastName = "";
-            string contactNumber = "";
+            int contactNumber;
             string password = "";
 
             Console.WriteLine("==========Register Member==========");
@@ -56,10 +210,10 @@ namespace ConsoleApp1
                 lastName = InvalidInput();
 
             Console.Write("\n   Please enter member contact number  : ");
-            contactNumber = Console.ReadLine();
+            bool validInpud = int.TryParse(Console.ReadLine(), out contactNumber);
 
-            while (contactNumber == "")
-                contactNumber = InvalidInput();
+            while (!validInpud)
+                validInpud = int.TryParse(InvalidInput(), out contactNumber);
 
             userDetails = new string[] { firstName, lastName };
 
@@ -82,11 +236,11 @@ namespace ConsoleApp1
                     if (response == "1")
                     {
                         RegisterMember();
-                        continue;
+                        return;
                     }
                     else if (response == "0")
                     {
-                        continue;
+                        return;
                     }
 
                     Console.Write("\n\t\tInvalid respones, try again: ");
@@ -153,11 +307,11 @@ namespace ConsoleApp1
                     if (response == "1")
                     {
                         RemoveMember();
-                        break;
+                        return;
                     }
                     else if (response == "0")
                     {
-                        break;
+                        return;
                     }
 
                     Console.Write("\n\t\tInvalid respones, try again: ");
@@ -175,7 +329,49 @@ namespace ConsoleApp1
 
         public void DisplayMembersBorrowingTool()
         {
-            // TODO: 
+            Console.Clear();
+
+            Console.WriteLine("==========Display Member Currently Borrowing a Tool==========");
+
+            Console.Write("\n   Please enter tool name  : ");
+            string input = Console.ReadLine();
+
+            while (input == "")
+                input = InvalidInput();
+
+            var tool = ToolCollection.Tools.SearchTool(input);
+
+            if (tool != null)
+            {
+                tool.DisplayCurrentBorrowing();
+                Console.ReadKey();
+            }
+            else
+            {
+                bool validResponse = false;
+
+                Console.WriteLine("\nTool not found. Please select an option");
+                Console.WriteLine("\t1. Try again");
+                Console.WriteLine("\t0. Return");
+                Console.Write("\t\t: ");
+
+                while (!validResponse)
+                {
+                    var response = Console.ReadLine();
+
+                    if (response == "1")
+                    {
+                        DisplayMembersBorrowingTool();
+                        break;
+                    }
+                    else if (response == "0")
+                    {
+                        break;
+                    }
+
+                    Console.Write("\n\t\tInvalid respones, try again: ");
+                }
+            }
         }
 
 
