@@ -11,11 +11,8 @@ namespace ConsoleApp1
         public string Name { get; set; }
         public int Total { get; set; }
         public int NumberOnLoan { get; set; }
-        public int Avalable { get; }
-        //public UserMember[] MembersCurrentlyBorrowing { get; set; }
-        //public BorrowToken[] MembersCurrentlyBorrowing { get; set; }
+        public int Avalable { get; set; }
         public int[] MembersCurrentlyBorrowingIndex { get; set; }
-        //public int[] NumberOnLoanByMember { get; set; }
 
         public Tool(string category, string type, string name, int quantity)
         {
@@ -25,25 +22,17 @@ namespace ConsoleApp1
             Total = quantity;
             NumberOnLoan = 0;
             Avalable = Total - NumberOnLoan;
-
-            // assumed an array of size 30 is sufficient 
-            //MembersCurrentlyBorrowing = new UserMember[30];
             MembersCurrentlyBorrowingIndex = new int[MemberCollection.Members.Capacity];
-            //MembersCurrentlyBorrowing = new BorrowToken[30];
-            //NumberOnLoanByMember = new int[30];
         }
 
 
         public void AddBorrower(UserMember user)
         {
-            // TODO fix this - user still in array after being removed by staff
-
-            // list the index of borrower
-            // count times the tool is in currently in CurrentlyBorrowed in Member
-
             int index = MemberCollection.Members.Search(user.Name);
 
             MembersCurrentlyBorrowingIndex[index] = 1;
+            NumberOnLoan++;
+            Avalable = Total - NumberOnLoan;
 
             //MembersCurrentlyBorrowingIndex[index] = userBorrowing;
             //NumberOnLoanByMember[index] = 1;

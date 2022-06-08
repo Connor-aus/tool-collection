@@ -72,7 +72,10 @@ namespace ConsoleApp1
                 Console.Write("\n   Please enter your username  : ");
                 username = Console.ReadLine();
 
-                if (username == staffMember.Username && username != "0")
+                if (username == "0")
+                    return;
+
+                if (username == staffMember.Username)
                 {
                     Console.Write("\n   Please enter your password  : ");
                     password = Console.ReadLine();
@@ -82,6 +85,9 @@ namespace ConsoleApp1
                         staffMember.staffMenu.DisplayMainMenu();
                         return;
                     }
+
+                    if (password == "0")
+                        return;
                 }
 
                 Console.WriteLine("\n User not found. Please try again");
@@ -122,12 +128,6 @@ namespace ConsoleApp1
                 while (lastName == "")
                     lastName = InvalidInput();
 
-                Console.Write("\n   Please enter your password      : ");
-                password = Console.ReadLine();
-
-                if (password == "0")
-                    return;
-
                 userDetails = new string[] { firstName, lastName };
 
                 var memberIndex = MemberCollection.Members.Search(userDetails);
@@ -140,23 +140,29 @@ namespace ConsoleApp1
                 }
                 else
                 {
-                    UserMember member = (UserMember)MemberCollection.Members.MemberArray[memberIndex].Value;
-                    if (member.CheckPassword(password))
-                    {
-                        Console.Write($"\n\tWelcome {firstName}\n ");
-                        Console.ReadLine();
+                    Console.Write("\n   Please enter your password      : ");
 
-                        member.userMenu.DisplayMainMenu();
-                    }
-                    else
+                    UserMember member = (UserMember)MemberCollection.Members.MemberArray[memberIndex].Value;
+
+                    while (!member.CheckPassword(password))
                     {
-                        Console.Write("Incorrect password, please try again ");
-                        Console.ReadLine();
-                        MemberLogin();
+                        password = Console.ReadLine();
+
+                        if (password == "0")
+                            return;
+
+                        if (member.CheckPassword(password))
+                        {
+                            Console.Write($"\n\tWelcome {firstName}\n ");
+                            Console.ReadKey();
+
+                            member.userMenu.DisplayMainMenu();
+                            return;
+                        }
+
+                        Console.Write("\nIncorrect password, please try again : ");
                     }
                 }
-
-                Console.WriteLine("\n\tUser not found. Please try again");
             }
         }
 

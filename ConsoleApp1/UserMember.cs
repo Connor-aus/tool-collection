@@ -12,10 +12,9 @@ namespace ConsoleApp1
         public int TotalToolsBorrowed { get; set; }
         public int MaxBorrowedCapacity { get; set; }
         public BorrowToken[] CurrentBorrowedTools { get; set; }
-        //public int[] CurrentlyBorrowedToolsCount { get; set; }
         public Menu userMenu;
 
-        // cosntructor
+        // constructor
         public UserMember(string[] name, string pswd, int contact)
         {
             Name = name;
@@ -23,7 +22,7 @@ namespace ConsoleApp1
             ContactNumber = contact;
             TotalToolsBorrowed = 0;
             MaxBorrowedCapacity = 5;
-            CurrentBorrowedTools = new BorrowToken[MaxBorrowedCapacity]; // user of array due to small borrowing capacity
+            CurrentBorrowedTools = new BorrowToken[MaxBorrowedCapacity]; // array used due to small borrowing capacity
 
             userMenu = new UserMenu(this);
         }
@@ -107,6 +106,7 @@ namespace ConsoleApp1
             if (TotalToolsBorrowed >= MaxBorrowedCapacity)
             {
                 Console.WriteLine("\nYou have reached your maximum borrowing capacity. \nReturn a tool to borrow more.");
+                Console.ReadKey();
                 return;
             }
 
@@ -115,44 +115,50 @@ namespace ConsoleApp1
 
             string toolName = Console.ReadLine();
 
-            var tool = ToolCollection.Tools.SearchTool(toolName);
-
-            if (tool != null)
+            while (toolName != "0")
             {
-                if (tool != null && tool.Avalable <= 0)
+                var tool = ToolCollection.Tools.SearchTool(toolName);
+
+                if (tool != null)
                 {
-                    Console.Write("\n\tAll of these tools are currently on loan.");
+                    if (tool != null && tool.Avalable <= 0)
+                    {
+                        Console.Write("\n\tAll of these tools are currently on loan.");
+                        Console.ReadKey();
+                        return;
+                    }
+
+                    // search for already borrowed tool
+                    // array not sorted as size is small
+                    for (int i = 0; i < CurrentBorrowedTools.Length; i++)
+                    {
+                        if (CurrentBorrowedTools[i]?.Name == tool.Name)
+                        {
+                            CurrentBorrowedTools[i].Count++;
+                            break;
+                        }
+
+                        if (CurrentBorrowedTools[i] == null)
+                        {
+                            CurrentBorrowedTools[i] = new BorrowToken(tool.Name);
+                            tool.AddBorrower(this);
+                            break;
+                        }
+                    }
+
+                    TotalToolsBorrowed++;
+                    ToolCollection.Tools.AddToHistory(tool.Name);
+
+                    Console.Write("\n\tSuccess ");
                     Console.ReadKey();
                     return;
                 }
-
-                // search for already borrowed tool
-                // array not sorted as size is small
-                for (int i = 0; i < CurrentBorrowedTools.Length; i++)
+                else
                 {
-                    if (CurrentBorrowedTools[i]?.Name == tool.Name)
-                    {
-                        CurrentBorrowedTools[i].Count++;
-                        break;
-                    }
-
-                    if (CurrentBorrowedTools[i] == null)
-                    {
-                        CurrentBorrowedTools[i] = new BorrowToken(tool.Name);
-                        tool.AddBorrower(this);
-                        break;
-                    }
+                    Console.Write("\nTool not found. Please try again : ");
+                    toolName = Console.ReadLine();
                 }
-
-                TotalToolsBorrowed++;
-                ToolCollection.Tools.AddToHistory(tool.Name);
-
-                Console.Write("\n\tSuccess ");
-                Console.ReadKey();
-                return;
             }
-
-            Console.ReadLine();
         }
 
 
@@ -167,28 +173,33 @@ namespace ConsoleApp1
             Console.Clear();
             Console.WriteLine("==========Borrowed Tools==========\n");
 
+            if (TotalToolsBorrowed <= 0)
+            {
+                Console.Write("\tNot currently borrowing any tools. ");
+                Console.ReadKey();
+                return;
+            }
+
             for (int i = 0; i < CurrentBorrowedTools.Length; i++)
             {
                 if (CurrentBorrowedTools[i] != null)
-                {
                     Console.WriteLine($"Name: {CurrentBorrowedTools[i].Name}    Count: x{CurrentBorrowedTools[i].Count}");
-                }
             }
 
             Console.ReadKey();
         }
 
-
+        // displays more than three tools if multiple tools have been
+        // borrowed an equal number of times for the final position
         public void DisplayTopThreeTools()
         {
             Console.Clear();
             Console.WriteLine("==========Top Three Borrowed Tools==========\n");
 
-            if (TotalToolsBorrowed <= 0)
+            if (ToolCollection.Tools.ToolBorrowHistory[0] == null)
             {
-                Console.Write("\tNot currently borrowing any tools. ");
+                Console.Write("\tNo tools have been borrowed. ");
                 Console.ReadKey();
-
                 return;
             }
 
@@ -197,20 +208,19 @@ namespace ConsoleApp1
 
             for (int i = 0; i < ToolCollection.Tools.ToolBorrowHistory.Length; i++)
             {
-                if ((i > 3 && !differentValue) || ToolCollection.Tools.ToolBorrowHistory[i] == null || ToolCollection.Tools.ToolBorrowHistory[i].Count == 0)
+                if ((i > 3 && differentValue) || ToolCollection.Tools.ToolBorrowHistory[i] == null || ToolCollection.Tools.ToolBorrowHistory[i].Count == 0)
                 {
                     break;
                 }
 
                 Console.WriteLine($"{index}. {ToolCollection.Tools.ToolBorrowHistory[i].Name} borrowed {ToolCollection.Tools.ToolBorrowHistory[i].Count} times.");
-                i++;
 
                 if (i < 3 && ToolCollection.Tools.ToolBorrowHistory[i].Count == ToolCollection.Tools.ToolBorrowHistory[i + 1]?.Count)
                     differentValue = false;
                 else
                 {
                     differentValue = true;
-                    index++;
+                    index = i + 2;
                 }
             }
 

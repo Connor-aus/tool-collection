@@ -46,7 +46,6 @@ namespace ConsoleApp1
             {
                 // tool already exists
                 // increases total
-
                 tool.Total++;
 
                 Console.WriteLine("\n\tThis tool already exist in the Library.");
@@ -60,7 +59,6 @@ namespace ConsoleApp1
             {
                 // tool is new
                 // enter tool category
-
                 Console.WriteLine($"\n\t{toolName} does not currently exist in the library.");
                 Console.WriteLine("\tPlease answer the following questions so it can be added.");
                 Console.WriteLine("\nPlease select a category for this tool:\n");

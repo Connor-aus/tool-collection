@@ -41,6 +41,10 @@ namespace ConsoleApp1
                 Console.WriteLine($"new Member : fname: {name[0]}  lname: {name[1]}  pswd: {number}  contact:  {(i + 1) * 111}");
             }
 
+            name = new string[] { "1", "1" };
+            MemberCollection.Members.Insert(new UserMember(name, "1", 1));
+            Console.WriteLine("new Member : fname: 1  lname: 1  pswd: 1  contact: 1");
+
             Console.Write("\n\t Above are some dummy members. They can be used for the pupose of testing testing member methods. \n");
             Console.ReadLine();
         }

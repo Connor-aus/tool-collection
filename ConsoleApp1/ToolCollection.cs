@@ -86,6 +86,8 @@ namespace ConsoleApp1
 
             // add tool to history
             ToolBorrowHistory[index] = new BorrowToken(toolName);
+
+            SortHistory(index);
         }
 
 
@@ -132,6 +134,8 @@ namespace ConsoleApp1
 
             string[][] toolTypes = new string[][] {gardeningTools, flooringTools, fencingTools, measuringTools, cleaningTools, paintingTools,
                 electronicTools, electricityTools, automotiveTools };
+
+            // TODO move this dummy population to main method
 
             for (int i = 0; i < ToolLibrary.Length; i++)
             {
