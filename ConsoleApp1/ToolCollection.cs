@@ -44,13 +44,15 @@ namespace ConsoleApp1
         // search tool by tool name
         public Tool SearchTool(string toolName)
         {
+            string toolNameLower = toolName.ToLower();
+
             for (int i = 0; i < ToolLibrary.Length; i++)
             {
                 for (int j = 0; j < ToolLibrary[i].Length; j++)
                 {
                     for (int k = 0; k < ToolLibrary[i][j].Length; k++)
                     {
-                        if (ToolLibrary[i][j][k]?.Name == toolName)
+                        if (ToolLibrary[i][j][k]?.Name.ToLower() == toolNameLower)
                             return ToolLibrary[i][j][k];
                     }
                 }
@@ -161,8 +163,8 @@ namespace ConsoleApp1
             string[][] toolTypes = new string[][] {gardeningTools, flooringTools, fencingTools, measuringTools, cleaningTools, paintingTools,
                 electronicTools, electricityTools, automotiveTools };
 
-            // TODO move this dummy population to main method
-
+            
+            // populate dummy tool data
             for (int i = 0; i < ToolLibrary.Length; i++)
             {
                 ToolLibrary[i] = new Tool[toolTypes[i].Length][];
@@ -188,7 +190,7 @@ namespace ConsoleApp1
             ToolLibrary[0][0][8] = new Tool(toolCategories[0], toolTypes[0][0], "test3", 5);
             ToolLibrary[0][0][9] = new Tool(toolCategories[0], toolTypes[0][0], "test4", 5);
 
-            Console.Write("\n\t Above are some dummy tools. The names can be used as reference. \n");
+            Console.WriteLine("\n\t Above are some dummy tools. The names can be used as reference. \n");
             Console.ReadKey();
         }
     }

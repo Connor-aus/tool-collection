@@ -15,6 +15,8 @@ namespace ConsoleApp1
             // populate dummy user members and a staff member data
             PopulateTestUserData();
 
+            memberCollection.Print();
+
             Console.WriteLine("Welcome to the Tool Library System\n");
 
             Menu mainMenu = new MainMenu();
@@ -24,28 +26,42 @@ namespace ConsoleApp1
         }
 
 
-        // creates 9 dummy members and adds them to the member collection
+        // creates 10 dummy members and adds them to the member collection
         public static void PopulateTestUserData()
         {
-            string[] name = new string[2];
-            string number;
+            // TODO remove this
+            //string[] name = new string[2];
+            //string number;
 
-            for (int i = 0; i < 9; i++)
+            //for (int i = 0; i < 9; i++)
+            //{
+            //    number = (i + 1).ToString();
+            //    name[0] = "member" + number;
+            //    name[1] = "member";
+
+            //    MemberCollection.Members.Insert(new UserMember(name, number, (i + 1) * 111));
+
+            //    Console.WriteLine($"new Member : fname: {name[0]}  lname: {name[1]}  pswd: {number}  contact:  {(i + 1) * 111}");
+            //}
+
+            string[] firstNames = new string[10] { "Dave", "Julie", "Kelly", "Mohammad", "test1", "test2", "test3", "Chistine", "Masa", "Bo" };
+            string[] lastNames = new string[10] { "Blazzeq", "Handers", "Whittaker", "Al Usam", "test", "test", "test", "Chay", "Hitataki", "Lo" };
+            string[] name;
+            string password = "p";
+
+            for (int i = 0; i < firstNames.Length; i++)
             {
-                number = (i + 1).ToString();
-                name[0] = "member" + number;
-                name[1] = "member";
-
-                MemberCollection.Members.Insert(new UserMember(name, number, (i + 1) * 111));
-
-                Console.WriteLine($"new Member : fname: {name[0]}  lname: {name[1]}  pswd: {number}  contact:  {(i + 1) * 111}");
+                name = new string[] { firstNames[i], lastNames[i] };
+                MemberCollection.Members.Insert(new UserMember(name, password, 5));
+                Console.WriteLine($"new Member : fname: {firstNames[i]}  lname: {lastNames[i]}  pswd: {password}  contact:  5");
             }
 
-            name = new string[] { "1", "1" };
+            name = new string[] { "11", "11" };
             MemberCollection.Members.Insert(new UserMember(name, "1", 1));
-            Console.WriteLine("new Member : fname: 1  lname: 1  pswd: 1  contact: 1");
+            Console.WriteLine("new Member : fname: 11  lname: 11  pswd: 1  contact: 1");
 
-            Console.Write("\n\t Above are some dummy members. They can be used for the pupose of testing testing member methods. \n");
+            Console.WriteLine("\n\t Above are some dummy members. They can be used for the pupose of testing member methods.");
+            Console.WriteLine("\t * The members named Dave, test1, test2 and test3 will have the same hash key and require collision handling\n");
             Console.ReadKey();
         }
     }

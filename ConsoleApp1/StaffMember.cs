@@ -377,8 +377,6 @@ namespace ConsoleApp1
 
         public void DisplayMembersBorrowingTool()
         {
-            // TODO check is displays multiple users
-
             Console.Clear();
 
             Console.WriteLine("==========Display Member Currently Borrowing a Tool==========");
@@ -448,7 +446,7 @@ namespace ConsoleApp1
             if (found != -1)
             {
                 UserMember member = (UserMember)MemberCollection.Members.MemberArray[found].Value;
-                Console.Write($"\n\tMember contact number    : {member.ContactNumber}");
+                Console.WriteLine($"\n\tMember contact number    : {member.ContactNumber}");
                 Console.ReadKey();
             }
             else

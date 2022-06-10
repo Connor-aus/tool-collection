@@ -22,6 +22,7 @@ namespace ConsoleApp1
             get { return members; }
         }
 
+
         // initial singleton set-up and return singleton
         public static MemberCollection InitializeMemberCollection()
         {
@@ -30,6 +31,7 @@ namespace ConsoleApp1
 
             return members;
         }
+
 
         private MemberCollection(int size)
         {
@@ -43,11 +45,13 @@ namespace ConsoleApp1
                 MemberArray[i] = new Key_Value_Pair(empty, null);
         }
 
+
         public int Capacity
         {
             get { return buckets; }
             set { buckets = Capacity; }
         }
+
 
         /* pre:  the hashtable is not full
          * post: return the bucket for inserting the key
@@ -67,6 +71,7 @@ namespace ConsoleApp1
             return (offset + bucket) % buckets;
         }
 
+
         /* pre:  true
         * post: all the elements in the hashtable have been removed
         */
@@ -76,6 +81,7 @@ namespace ConsoleApp1
             for (int i = 0; i < buckets; i++)
                 MemberArray[i].Key = empty;
         }
+
 
         /* pre:  true
         * post: return the bucket where the key is stored
@@ -96,6 +102,7 @@ namespace ConsoleApp1
             else
                 Console.WriteLine("The hashtable is full"); // doubling size of array is out of scope
         }
+
 
         /* pre:  true
          * post: return the bucket where the key is stored
@@ -123,6 +130,7 @@ namespace ConsoleApp1
             return -1;
         }
 
+
         /* pre:  nil
          * post: the given key has been removed from the hashtable if the given key is in the hashtable
         */
@@ -142,15 +150,68 @@ namespace ConsoleApp1
          */
         private int Hashing(string key)
         {
-            // TODO: implement hashing
-            // dictiornary for letters?
-            return (1 % buckets);
+            // last names are usually unique and when they are not the first name is usually unique
+            // all names are assumed to be minimum 2 letters for both the first and last name
+
+            char[] alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+            char[] keyArray = key.ToCharArray();
+            int keylength = key.Length;
+            int[] keyIndexes = new int[4] { 1, keylength - 3, keylength - 2, keylength - 1 };
+            int[] keyValues = new int[4];
+            int keyValue = 0;
+
+            for (int i = 0; i < keyValues.Length; i++)
+            {
+                var value = Char.ToUpper(keyArray[keyIndexes[i]]);
+
+                for (int j = 0; j < alpha.Length; j++)
+                {
+                    if (value == alpha[j])
+                    {
+                        keyValues[i] = j;
+                        break;
+                    }
+                }
+            }
+
+            for (int i = 0; i < keyValues.Length; i++)
+                keyValue += keyValues[i];
+
+            return keyValue * 3 % buckets;
         }
 
+
+        // linear probing
         private int ProbingMethod(int offset)
         {
-            // TODO: implement probing method
-            return 0;
+            // linear pobing is sufficient due to the natural spread of initial keys.
+
+            return offset + 1;
+        }
+
+
+        /* pre:  nil
+	 * post: print all the elements in the hashtable
+	*/
+        public void Print()
+        {
+            Console.WriteLine("------------Printed representation of the Member array-----------------\n");
+
+            for (int i = 0; i < buckets; i++)
+            {
+                if (MemberArray[i].Key == empty)
+                    Console.Write(" ____ ");
+                else if (MemberArray[i].Key == deleted)
+                    Console.Write(" _del_ ");
+                else
+                {
+                    var member = (UserMember)MemberArray[i].Value;
+                    Console.Write(" " + member.Name[0] + " " + member.Name[1] + " ");
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.ReadKey();
         }
     }
 }

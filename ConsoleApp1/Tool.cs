@@ -11,7 +11,6 @@ namespace ConsoleApp1
         public string Name { get; set; }
         public int Total { get; set; }
         public int NumberOnLoan { get; set; }
-        private int available;
         public int[] MembersCurrentlyBorrowingIndex { get; set; }
 
         public int Available
@@ -24,9 +23,8 @@ namespace ConsoleApp1
             Category = category;
             Type = type;
             Name = name;
-            Total = 3; // TODO set this to quantity
+            Total = quantity;
             NumberOnLoan = 0;
-            available = Total - NumberOnLoan;
             MembersCurrentlyBorrowingIndex = new int[MemberCollection.Members.Capacity];
         }
 
@@ -65,7 +63,7 @@ namespace ConsoleApp1
             {
                 if (MembersCurrentlyBorrowingIndex[i] == 1)
                 {
-                    var member = (UserMember)MemberCollection.Members.MemberArray[MembersCurrentlyBorrowingIndex[i]].Value;
+                    var member = (UserMember)MemberCollection.Members.MemberArray[i].Value;
 
                     for (int j = 0; j < member.CurrentBorrowedTools.Length; j++)
                     {
