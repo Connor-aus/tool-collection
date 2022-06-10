@@ -29,21 +29,6 @@ namespace ConsoleApp1
         // creates 10 dummy members and adds them to the member collection
         public static void PopulateTestUserData()
         {
-            // TODO remove this
-            //string[] name = new string[2];
-            //string number;
-
-            //for (int i = 0; i < 9; i++)
-            //{
-            //    number = (i + 1).ToString();
-            //    name[0] = "member" + number;
-            //    name[1] = "member";
-
-            //    MemberCollection.Members.Insert(new UserMember(name, number, (i + 1) * 111));
-
-            //    Console.WriteLine($"new Member : fname: {name[0]}  lname: {name[1]}  pswd: {number}  contact:  {(i + 1) * 111}");
-            //}
-
             string[] firstNames = new string[10] { "Dave", "Julie", "Kelly", "Mohammad", "test1", "test2", "test3", "Chistine", "Masa", "Bo" };
             string[] lastNames = new string[10] { "Blazzeq", "Handers", "Whittaker", "Al Usam", "test", "test", "test", "Chay", "Hitataki", "Lo" };
             string[] name;

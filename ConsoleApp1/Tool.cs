@@ -79,11 +79,5 @@ namespace ConsoleApp1
                 }
             }
         }
-
-
-        public void SortMembers()
-        {
-            //TODO if needed
-        }
     }
 }

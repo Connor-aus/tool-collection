@@ -204,7 +204,7 @@ namespace ConsoleApp1
             {
                 for (int i = 0; i < CurrentBorrowedTools.Length; i++)
                 {
-                    if (CurrentBorrowedTools[i]?.Name == toolName)
+                    if (CurrentBorrowedTools[i]?.Name.ToLower() == toolName.ToLower())
                     {
                         var tool = ToolCollection.Tools.SearchTool(toolName);
 

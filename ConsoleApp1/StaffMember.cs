@@ -195,9 +195,9 @@ namespace ConsoleApp1
                 if (tool != null)
                 {
                     if (tool.Total <= 0)
-                        Console.Write($"\tCannot remove {toolName} as there none in the library. ");
+                        Console.Write($"\tCannot remove {toolName} as there are none in the library. ");
                     else if (tool.Available <= 0)
-                        Console.Write($"\tCannot remove {toolName} as they are all on loan. ");
+                        Console.Write($"\tCannot remove {toolName} as there are all on loan. ");
                     else if (tool.Total == 1)
                     {
                         // remove tool from tool library
@@ -250,11 +250,7 @@ namespace ConsoleApp1
             while (lastName == "")
                 lastName = InvalidInput();
 
-            Console.Write("\n   Please enter member contact number  : ");
-            bool validInpud = int.TryParse(Console.ReadLine(), out contactNumber);
-
-            while (!validInpud)
-                validInpud = int.TryParse(InvalidInput(), out contactNumber);
+            
 
             userDetails = new string[] { firstName, lastName };
 
@@ -289,6 +285,12 @@ namespace ConsoleApp1
             }
             else
             {
+                Console.Write("\n   Please enter member contact number  : ");
+                bool validInpud = int.TryParse(Console.ReadLine(), out contactNumber);
+
+                while (!validInpud)
+                    validInpud = int.TryParse(InvalidInput(), out contactNumber);
+
                 Console.Write("\n   Please enter member password  : ");
                 password = Console.ReadLine();
 

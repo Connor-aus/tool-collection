@@ -62,13 +62,6 @@ namespace ConsoleApp1
         }
 
 
-        // TODO: search tool by tool category, type and name
-        public static Tool SearchTool(string toolCat, string toolType, string toolName)
-        {
-            return new Tool(null, null, null, 0);
-            return null;
-        }
-
         // completely remove tool from library
         public void RemoveTool(Tool tool)
         {
@@ -183,12 +176,6 @@ namespace ConsoleApp1
                     }
                 }
             }
-
-            //TODO remove dummy data here
-            ToolLibrary[0][0][6] = new Tool(toolCategories[0], toolTypes[0][0], "test1", 5);
-            ToolLibrary[0][0][7] = new Tool(toolCategories[0], toolTypes[0][0], "test2", 5);
-            ToolLibrary[0][0][8] = new Tool(toolCategories[0], toolTypes[0][0], "test3", 5);
-            ToolLibrary[0][0][9] = new Tool(toolCategories[0], toolTypes[0][0], "test4", 5);
 
             Console.WriteLine("\n\t Above are some dummy tools. The names can be used as reference. \n");
             Console.ReadKey();
